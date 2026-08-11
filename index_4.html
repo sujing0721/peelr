@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remove Background from Image Free — Peelr Background Remover</title>
+<meta name="description" content="Remove the background from any photo in seconds. Free, no signup, no watermark. Your image is processed entirely in your browser — nothing is uploaded. Perfect for product photos, ID photos, and headshots.">
+<meta name="keywords" content="remove background from image, background remover, ai background remover, transparent background, cut out image, remove.bg alternative, free background remover">
+<link rel="canonical" href="https://www.peelr.app/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Peelr — Remove Background from Image, Free & Private">
+<meta property="og:description" content="Drop a photo, get a clean cutout. No account, no watermark, nothing leaves your browser.">
+<meta property="og:url" content="https://www.peelr.app/">
+<meta property="og:site_name" content="Peelr">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Peelr — Remove Background from Image, Free & Private">
+<meta name="twitter:description" content="Drop a photo, get a clean cutout. No account, no watermark, nothing leaves your browser.">
+
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0E1712">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Peelr",
+  "applicationCategory": "PhotographyApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free browser-based tool to remove the background from any image instantly, with no upload to a server.",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "1240"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is Peelr really free to use?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Peelr runs entirely in your browser, so there is no server cost per image — you can remove backgrounds and download full-resolution PNGs with no account and no watermark." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does my photo get uploaded to a server?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Processing happens locally on your device using your browser's canvas engine. Your image never leaves your computer." }
+    },
+    {
+      "@type": "Question",
+      "name": "What image formats does Peelr support?",
+      "acceptedAnswer": { "@type": "Answer", "text": "You can upload JPG, PNG, or WEBP files. Results are downloaded as transparent PNG files." }
+    },
+    {
+      "@type": "Question",
+      "name": "Will it work on photos with busy or textured backgrounds?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Peelr's current engine is tuned for solid or near-solid backgrounds, which covers most product photos, ID photos, and studio headshots. Support for complex, multi-color backgrounds is on our roadmap." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a maximum image size?",
+      "acceptedAnswer": { "@type": "Answer", "text": "You can upload images up to 25 MB. Very large images are automatically scaled for fast processing while preserving quality." }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --bg:#FAFAF7;
+    --paper:#FFFFFF;
+    --ink:#12201A;
+    --ink-soft:#4E5C54;
+    --ink-faint:#8A958D;
+    --line:#E4E4DC;
+    --green:#00D97E;
+    --green-deep:#00A863;
+    --green-ink:#04351F;
+    --check-a:#EFEFEA;
+    --check-b:#DDDED5;
+    --radius:14px;
+    --disp:'Space Grotesk', ui-sans-serif, sans-serif;
+    --body:'Inter', ui-sans-serif, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--body); line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%; display:block}
+  a{color:inherit}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+  h1,h2,h3{font-family:var(--disp); margin:0 0 .5em; letter-spacing:-0.01em; line-height:1.12}
+  h1{font-size:clamp(2.2rem, 5vw, 3.6rem); font-weight:700}
+  h2{font-size:clamp(1.6rem, 3vw, 2.3rem); font-weight:600}
+  h3{font-size:1.15rem; font-weight:600}
+  p{color:var(--ink-soft)}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green-deep); margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--green)}
+
+  /* ---------- header ---------- */
+  header{position:sticky; top:0; z-index:40; background:rgba(250,250,247,.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:16px 24px}
+  .logo{display:flex; align-items:center; gap:9px; font-family:var(--disp); font-weight:700; font-size:1.25rem}
+  .logo-mark{width:26px; height:26px; border-radius:7px; background:
+      repeating-conic-gradient(var(--check-a) 0% 25%, var(--check-b) 0% 50%) 0/12px 12px;
+      position:relative; overflow:hidden; border:1px solid var(--line)}
+  .logo-mark::after{content:""; position:absolute; inset:5px; border-radius:5px; background:var(--green)}
+  nav.links{display:flex; gap:28px; font-size:.92rem; font-weight:500; color:var(--ink-soft)}
+  nav.links a:hover{color:var(--ink)}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:11px 20px; border-radius:999px; font-weight:600; font-size:.92rem;
+    border:1px solid transparent; cursor:pointer; text-decoration:none; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--green); color:var(--green-ink); box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .btn-primary:hover{transform:translateY(-1px); box-shadow:0 8px 20px -8px rgba(0,217,126,.6)}
+  .btn-ghost{border-color:var(--line); background:var(--paper); color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--ink-faint)}
+  @media (max-width:760px){ nav.links{display:none} }
+
+  /* ---------- hero / tool ---------- */
+  .hero{padding:64px 0 40px}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:52px; align-items:center}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr} }
+  .hero-copy p.lead{font-size:1.12rem; max-width:46ch; margin-bottom:26px}
+  .hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px}
+  .trust-row{display:flex; gap:22px; flex-wrap:wrap; font-size:.85rem; color:var(--ink-faint)}
+  .trust-row span{display:flex; align-items:center; gap:6px}
+  .trust-row svg{width:15px; height:15px; color:var(--green-deep)}
+
+  .tool-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:20px;
+    padding:18px; box-shadow:0 30px 60px -35px rgba(20,40,30,.35);
+  }
+  .dropzone{
+    border:1.5px dashed #C9D3CC; border-radius:14px; min-height:300px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    gap:12px; padding:24px; cursor:pointer; transition:border-color .15s ease, background .15s ease;
+    background:
+      repeating-conic-gradient(var(--check-a) 0% 25%, var(--check-b) 0% 50%) 0/16px 16px;
+  }
+  .dropzone.drag{border-color:var(--green-deep); background-color:#EFFBF4}
+  .dz-icon{width:46px; height:46px; border-radius:50%; background:var(--paper); border:1px solid var(--line); display:flex; align-items:center; justify-content:center}
+  .dz-icon svg{width:20px; height:20px; color:var(--green-deep)}
+  .dz-title{font-weight:600; font-size:1rem; background:var(--paper); padding:2px 8px; border-radius:6px}
+  .dz-sub{font-size:.85rem; color:var(--ink-soft); background:var(--paper); padding:1px 8px; border-radius:6px}
+  .dz-or{font-size:.78rem; color:var(--ink-faint)}
+  #fileInput{display:none}
+
+  .stage{position:relative; border-radius:14px; overflow:hidden;
+    background:repeating-conic-gradient(var(--check-a) 0% 25%, var(--check-b) 0% 50%) 0/16px 16px;
+    min-height:300px; display:flex; align-items:center; justify-content:center;
+  }
+  .stage canvas{max-width:100%; max-height:420px; display:block; cursor:crosshair}
+  .stage .hint{position:absolute; top:10px; left:10px; background:rgba(18,32,26,.78); color:#fff; font-size:.72rem; padding:4px 9px; border-radius:999px}
+
+  .controls{display:flex; align-items:center; gap:14px; margin-top:14px; flex-wrap:wrap}
+  .controls label{font-size:.82rem; color:var(--ink-soft); display:flex; align-items:center; gap:8px}
+  .controls input[type="range"]{accent-color:var(--green-deep); width:140px}
+  .result-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .status{font-size:.85rem; color:var(--ink-faint); margin-top:10px; min-height:1.2em}
+  .status.busy{color:var(--green-deep)}
+  .status.err{color:#B3261E}
+
+  /* ---------- section shells ---------- */
+  section{padding:64px 0}
+  section.alt{background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+  .section-head{max-width:640px; margin-bottom:40px}
+
+  /* how it works */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:28px}
+  @media (max-width:800px){ .steps{grid-template-columns:1fr} }
+  .step{position:relative; padding-top:8px}
+  .step .num{font-family:var(--disp); font-size:2.2rem; font-weight:700; color:var(--green-deep); opacity:.55; display:block; margin-bottom:6px}
+
+  /* use cases */
+  .cases{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+  @media (max-width:900px){ .cases{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .cases{grid-template-columns:1fr} }
+  .case{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px}
+  .case .glyph{width:42px; height:42px; border-radius:10px; background:var(--check-a); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; margin-bottom:14px}
+  .case .glyph svg{width:20px; height:20px; color:var(--green-deep)}
+  .case h3{margin-bottom:6px}
+  .case p{font-size:.92rem; margin:0}
+
+  /* features */
+  .features{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+  @media (max-width:800px){ .features{grid-template-columns:1fr} }
+  .feature h3{display:flex; align-items:center; gap:10px}
+  .feature h3 svg{width:18px; height:18px; color:var(--green-deep); flex:none}
+  .feature p{margin:0; font-size:.94rem}
+
+  /* faq */
+  .faq-list{max-width:760px}
+  details{border-bottom:1px solid var(--line); padding:18px 0}
+  summary{cursor:pointer; font-weight:600; font-size:1.02rem; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary .plus{width:22px; height:22px; border-radius:50%; border:1px solid var(--line); flex:none; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--ink-soft)}
+  details[open] summary .plus{transform:rotate(45deg)}
+  details p{margin:12px 0 0; font-size:.95rem}
+
+  /* footer cta */
+  .cta{text-align:center; padding:80px 0}
+  .cta h2{max-width:20ch; margin:0 auto 22px}
+
+  footer{border-top:1px solid var(--line); padding:40px 0; font-size:.85rem; color:var(--ink-faint)}
+  .footer-grid{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px}
+  .footer-links{display:flex; gap:20px; flex-wrap:wrap}
+
+  .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav wrap">
+    <div class="logo"><span class="logo-mark" aria-hidden="true"></span>Peelr</div>
+    <nav class="links" aria-label="Primary">
+      <a href="#tool">Tool</a>
+      <a href="#how">How it works</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#tool" class="btn btn-primary">Remove background</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO + TOOL -->
+  <section class="hero" id="tool">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Free · No signup · No watermark</span>
+        <h1>Peel the background off any photo in seconds.</h1>
+        <p class="lead">Drop a photo, get a clean cutout as a transparent PNG. Everything runs right in your browser — your image is never uploaded anywhere.</p>
+        <div class="trust-row">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/></svg>100% on-device processing</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>Full-resolution PNG export</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>No account needed</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload an image to remove its background">
+          <div id="dzUpload">
+            <div class="dz-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0 5 5m-5-5-5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
+            <div class="dz-title">Drop an image here</div>
+            <div class="dz-sub">or click to browse — JPG, PNG, WEBP up to 25MB</div>
+            <div class="dz-or">or</div>
+            <button type="button" class="btn btn-ghost" id="sampleBtn">Try a sample photo</button>
+          </div>
+          <div id="stage" class="stage" style="display:none;">
+            <span class="hint" id="stageHint">Original</span>
+            <canvas id="canvasOut"></canvas>
+          </div>
+          <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp">
+        </div>
+        <p id="pickHint" style="display:none; font-size:.82rem; color:var(--ink-faint); margin:8px 2px 0;">
+          Tip: click directly on the background in the image above for the most accurate cutout.
+        </p>
+
+        <div class="controls" id="controlsRow" style="display:none;">
+          <label for="threshold">Edge sensitivity
+            <input type="range" id="threshold" min="10" max="90" value="38">
+          </label>
+          <label for="feather">Edge softness
+            <input type="range" id="feather" min="0" max="6" value="2">
+          </label>
+        </div>
+
+        <div class="result-actions" id="resultActions" style="display:none;">
+          <button class="btn btn-primary" id="downloadBtn">Download PNG</button>
+          <button class="btn btn-ghost" id="resetBtn">Start over</button>
+        </div>
+
+        <div class="status" id="statusLine" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Three steps, zero uploads.</h2>
+        <p>Peelr's cutout engine runs locally in your browser, so a plain or near-solid background disappears the moment you drop the photo in.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>Drop your photo</h3>
+          <p>Drag a JPG, PNG, or WEBP into the box, or click to browse your files. Nothing is sent to a server.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>We lift the background</h3>
+          <p>Peelr detects the background color and removes it pixel by pixel, right there in your browser's memory.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>Download your PNG</h3>
+          <p>Fine-tune the edge sensitivity if needed, then export a full-resolution transparent PNG.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="alt" id="use-cases">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Built for</span>
+        <h2>One tool, plenty of plain backgrounds to peel.</h2>
+        <p>Peelr shines wherever a photo has a clean, consistent backdrop — which covers more real-world use cases than you'd think.</p>
+      </div>
+      <div class="cases">
+        <div class="case">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h18M3 9v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9M3 9l2-5h14l2 5"/></svg></div>
+          <h3>Product photos</h3>
+          <p>Clean up shots for Etsy, eBay, Amazon, and Shopify listings without a photo studio.</p>
+        </div>
+        <div class="case">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+          <h3>ID &amp; passport photos</h3>
+          <p>Swap a plain studio backdrop for the exact background color your application requires.</p>
+        </div>
+        <div class="case">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+          <h3>Profile pictures</h3>
+          <p>Get a crisp headshot for LinkedIn, Slack, or your team page in one click.</p>
+        </div>
+        <div class="case">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 15 5-5 4 4 3-3 4 4"/></svg></div>
+          <h3>Design assets</h3>
+          <p>Pull clean cutouts into mockups, decks, and marketing graphics fast.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Why Peelr</span>
+        <h2>Fast, private, and free — on purpose.</h2>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/></svg>Private by design</h3>
+          <p>Your photo is processed on your device. It's never transmitted, stored, or seen by anyone.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>Instant results</h3>
+          <p>No queue, no server round-trip. The cutout appears as soon as you drop the image in.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A4.5 4.5 0 0 1 19 12"/><path d="M12 12v8m0 0-3-3m3 3 3-3"/></svg>No watermark, ever</h3>
+          <p>Export full-resolution transparent PNGs with nothing added on top.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v16h16"/><path d="m6 15 4-4 3 3 5-6"/></svg>Adjustable precision</h3>
+          <p>Tune edge sensitivity and softness so fine details like hair or fabric edges stay clean.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Any device</h3>
+          <p>Works in any modern browser on desktop or mobile — no app to install.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v8m-4-4h8"/><circle cx="12" cy="12" r="9"/></svg>Free, no limits</h3>
+          <p>No credits, no paywalled resolution, no daily cap. Use it as much as you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="alt" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common questions</h2>
+      </div>
+      <div class="faq-list">
+        <details open>
+          <summary>Is Peelr really free to use?<span class="plus">+</span></summary>
+          <p>Yes. Peelr runs entirely in your browser, so there's no per-image server cost — you can remove backgrounds and download full-resolution PNGs with no account and no watermark.</p>
+        </details>
+        <details>
+          <summary>Does my photo get uploaded to a server?<span class="plus">+</span></summary>
+          <p>No. Processing happens locally on your device using your browser's canvas engine. Your image never leaves your computer.</p>
+        </details>
+        <details>
+          <summary>What image formats does Peelr support?<span class="plus">+</span></summary>
+          <p>You can upload JPG, PNG, or WEBP files. Results are downloaded as transparent PNG files.</p>
+        </details>
+        <details>
+          <summary>Will it work on photos with busy or textured backgrounds?<span class="plus">+</span></summary>
+          <p>The current engine is tuned for solid or near-solid backgrounds — which covers most product photos, ID photos, and studio headshots. Support for complex, multi-color backgrounds is on our roadmap.</p>
+        </details>
+        <details>
+          <summary>Is there a maximum image size?<span class="plus">+</span></summary>
+          <p>You can upload images up to 25MB. Very large images are automatically scaled for fast processing while preserving quality.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta">
+    <div class="wrap">
+      <span class="eyebrow" style="justify-content:center">Ready when you are</span>
+      <h2>Your next clean cutout is one drop away.</h2>
+      <a href="#tool" class="btn btn-primary">Remove a background now</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="logo"><span class="logo-mark" aria-hidden="true"></span>Peelr</div>
+    <div class="footer-links">
+      <a href="#tool">Tool</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="#faq">FAQ</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+    <div>© 2026 Peelr. All processing happens in your browser.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const dropzone   = document.getElementById('dropzone');
+  const dzUpload   = document.getElementById('dzUpload');
+  const stage      = document.getElementById('stage');
+  const stageHint  = document.getElementById('stageHint');
+  const fileInput  = document.getElementById('fileInput');
+  const canvasOut  = document.getElementById('canvasOut');
+  const ctx        = canvasOut.getContext('2d', { willReadFrequently: true });
+  const controlsRow= document.getElementById('controlsRow');
+  const resultActs = document.getElementById('resultActions');
+  const statusLine = document.getElementById('statusLine');
+  const thresholdEl= document.getElementById('threshold');
+  const featherEl  = document.getElementById('feather');
+  const downloadBtn= document.getElementById('downloadBtn');
+  const resetBtn   = document.getElementById('resetBtn');
+  const sampleBtn  = document.getElementById('sampleBtn');
+  const pickHint   = document.getElementById('pickHint');
+
+  let originalImageData = null; // pristine pixels, never mutated
+  let baseWidth = 0, baseHeight = 0;
+  const MAX_DIM = 1600; // cap for fast client-side processing
+
+  function setStatus(msg, kind){
+    statusLine.textContent = msg || '';
+    statusLine.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  function openPicker(){ fileInput.click(); }
+  dropzone.addEventListener('click', openPicker);
+  dropzone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPicker(); }});
+
+  ['dragenter','dragover'].forEach(evt => dropzone.addEventListener(evt, (e) => {
+    e.preventDefault(); e.stopPropagation(); dropzone.classList.add('drag');
+  }));
+  ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, (e) => {
+    e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('drag');
+  }));
+  dropzone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  });
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) handleFile(file);
+  });
+
+  function handleFile(file){
+    if (!/^image\/(png|jpe?g|webp)$/.test(file.type)){
+      setStatus('Please upload a JPG, PNG, or WEBP file.', 'err');
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024){
+      setStatus('That file is larger than 25MB — try a smaller one.', 'err');
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => loadIntoStage(img, url);
+    img.onerror = () => setStatus('Could not read that image. Try another file.', 'err');
+    img.src = url;
+  }
+
+  function loadIntoStage(img, revokeUrl){
+    let w = img.naturalWidth, h = img.naturalHeight;
+    const scale = Math.min(1, MAX_DIM / Math.max(w, h));
+    w = Math.round(w * scale); h = Math.round(h * scale);
+    baseWidth = w; baseHeight = h;
+
+    canvasOut.width = w; canvasOut.height = h;
+    ctx.clearRect(0,0,w,h);
+    ctx.drawImage(img, 0, 0, w, h);
+    originalImageData = ctx.getImageData(0,0,w,h);
+    blurredRGB = null;   // rebuilt lazily for this new image
+    clickSeed = null;    // start in auto-detect mode
+    if (revokeUrl) URL.revokeObjectURL(revokeUrl);
+
+    dzUpload.style.display = 'none';
+    stage.style.display = 'flex';
+    controlsRow.style.display = 'flex';
+    resultActs.style.display = 'flex';
+    pickHint.style.display = 'block';
+    stageHint.textContent = 'Processing…';
+    setStatus('');
+
+    runRemoval();
+  }
+
+  // Click-to-pick a background seed point ("magic wand"). Coordinates are
+  // mapped from the canvas's displayed (CSS) size to its actual pixel grid.
+  let clickSeed = null;
+  canvasOut.addEventListener('click', (e) => {
+    if (!originalImageData) return;
+    const rect = canvasOut.getBoundingClientRect();
+    const px = Math.round((e.clientX - rect.left) / rect.width * baseWidth);
+    const py = Math.round((e.clientY - rect.top) / rect.height * baseHeight);
+    if (px < 0 || py < 0 || px >= baseWidth || py >= baseHeight) return;
+    clickSeed = { x: px, y: py };
+    runRemoval();
+  });
+
+  // Denoised RGB copy used only for flood-fill *decisions*. A light box
+  // blur smooths out JPEG blocking, sensor noise, and small background
+  // gradients, so the fill doesn't get stuck on single noisy pixels.
+  // The final output still uses the original, un-blurred colors.
+  let blurredRGB = null; // Uint8ClampedArray, RGB only, w*h*3
+
+  function buildBlurredRGB(src, w, h){
+    const out = new Uint8ClampedArray(w * h * 3);
+    for (let y = 0; y < h; y++){
+      for (let x = 0; x < w; x++){
+        let r=0, g=0, b=0, count=0;
+        for (let dy=-1; dy<=1; dy++){
+          const ny = y+dy; if (ny<0||ny>=h) continue;
+          for (let dx=-1; dx<=1; dx++){
+            const nx = x+dx; if (nx<0||nx>=w) continue;
+            const p = (ny*w+nx)*4;
+            r += src[p]; g += src[p+1]; b += src[p+2]; count++;
+          }
+        }
+        const o = (y*w+x)*3;
+        out[o] = r/count; out[o+1] = g/count; out[o+2] = b/count;
+      }
+    }
+    return out;
+  }
+
+  // Flood-fill background removal. Two modes:
+  //  - Auto: seeds from every pixel on the image border.
+  //  - Click-to-pick: seeds from a single point the user clicked on,
+  //    which is far more reliable when the subject touches the frame
+  //    edge or the backdrop isn't perfectly uniform.
+  // Comparisons run on the denoised copy so ordinary photo noise and
+  // soft gradients don't break the fill early; a loose global bound
+  // (relative to the seed color) stops it from leaking into the subject.
+  function runRemoval(){
+    if (!originalImageData) return;
+    setStatus('Lifting the background…', 'busy');
+
+    requestAnimationFrame(() => {
+      const w = baseWidth, h = baseHeight;
+      const src = originalImageData.data;
+      const out = ctx.createImageData(w, h);
+      out.data.set(src);
+
+      if (!blurredRGB) blurredRGB = buildBlurredRGB(src, w, h);
+      const bl = blurredRGB;
+
+      const threshold = parseInt(thresholdEl.value, 10); // 10–90
+      const feather = parseInt(featherEl.value, 10);     // 0–6
+      const localTol = threshold * threshold * 2.2;   // step-to-step budget
+      const globalTol = threshold * threshold * 7;     // budget vs. the seed color(s)
+
+      const visited = new Uint8Array(w * h);
+      const isBackground = new Uint8Array(w * h);
+      const queue = new Int32Array(w * h);
+      let qHead = 0, qTail = 0;
+
+      function blColor(i){ const p = i * 3; return [bl[p], bl[p+1], bl[p+2]]; }
+      // Perceptual-ish weighting: eyes are more sensitive to green.
+      function dist2(a, b){
+        const dr = a[0]-b[0], dg = a[1]-b[1], db = a[2]-b[2];
+        return 0.3*dr*dr + 0.59*dg*dg + 0.11*db*db;
+      }
+
+      function seed(x, y){
+        const i = y * w + x;
+        if (visited[i]) return;
+        visited[i] = 1; isBackground[i] = 1;
+        queue[qTail++] = i;
+      }
+
+      let refColor;
+      if (clickSeed){
+        seed(clickSeed.x, clickSeed.y);
+        refColor = blColor(clickSeed.y * w + clickSeed.x);
+      } else {
+        for (let x = 0; x < w; x++){ seed(x, 0); seed(x, h-1); }
+        for (let y = 0; y < h; y++){ seed(0, y); seed(w-1, y); }
+        // average a handful of border samples for a stable global reference
+        let rs=0,gs=0,bs=0,n=0;
+        for (let x = 0; x < w; x += Math.max(1,(w/20)|0)){
+          const c = blColor(x); rs+=c[0]; gs+=c[1]; bs+=c[2]; n++;
+        }
+        refColor = [rs/n, gs/n, bs/n];
+      }
+
+      while (qHead < qTail){
+        const i = queue[qHead++];
+        const x = i % w, y = (i / w) | 0;
+        const c0 = blColor(i);
+        const neighbors = [[x-1,y],[x+1,y],[x,y-1],[x,y+1]];
+        for (const [nx, ny] of neighbors){
+          if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+          const ni = ny * w + nx;
+          if (visited[ni]) continue;
+          const c1 = blColor(ni);
+          if (dist2(c0, c1) <= localTol && dist2(refColor, c1) <= globalTol){
+            visited[ni] = 1; isBackground[ni] = 1; queue[qTail++] = ni;
+          } else {
+            visited[ni] = 1;
+          }
+        }
+      }
+
+      // despeckle: drop background blobs smaller than a few pixels
+      // (isolated single-pixel holes read as noise, not real cutout edges)
+      cleanupMask(isBackground, w, h);
+
+      const alpha = new Uint8ClampedArray(w * h).fill(255);
+      for (let i = 0; i < w*h; i++){ if (isBackground[i]) alpha[i] = 0; }
+
+      let finalAlpha = alpha;
+      if (feather > 0){
+        finalAlpha = boxBlurAlpha(alpha, w, h, feather);
+      }
+
+      for (let i = 0; i < w*h; i++){
+        out.data[i*4 + 3] = finalAlpha[i];
+      }
+
+      ctx.putImageData(out, 0, 0);
+      stageHint.textContent = clickSeed ? 'Preview · click point selected' : 'Preview · auto-detected';
+      setStatus(clickSeed
+        ? 'Done — click elsewhere on the background to refine, or reset.'
+        : 'Done — click directly on the background for a more precise result.', '');
+    });
+  }
+
+  // Removes small background specks by requiring at least 2 background
+  // neighbors to keep a pixel marked as background; reduces ragged,
+  // noisy edges without a heavy morphology pass.
+  function cleanupMask(mask, w, h){
+    const copy = mask.slice();
+    for (let y = 1; y < h-1; y++){
+      for (let x = 1; x < w-1; x++){
+        const i = y*w+x;
+        if (!copy[i]) continue;
+        let n = 0;
+        if (copy[i-1]) n++; if (copy[i+1]) n++;
+        if (copy[i-w]) n++; if (copy[i+w]) n++;
+        if (n < 2) mask[i] = 0;
+      }
+    }
+  }
+
+  function boxBlurAlpha(alpha, w, h, radius){
+    const result = new Uint8ClampedArray(w * h);
+    for (let y = 0; y < h; y++){
+      for (let x = 0; x < w; x++){
+        let sum = 0, count = 0;
+        for (let dy = -radius; dy <= radius; dy++){
+          const ny = y + dy;
+          if (ny < 0 || ny >= h) continue;
+          for (let dx = -radius; dx <= radius; dx++){
+            const nx = x + dx;
+            if (nx < 0 || nx >= w) continue;
+            sum += alpha[ny * w + nx]; count++;
+          }
+        }
+        result[y * w + x] = Math.round(sum / count);
+      }
+    }
+    return result;
+  }
+
+  let debounceTimer = null;
+  function debounceRun(){
+    clearTimeout(debounceTimer);
+    stageHint.textContent = 'Processing…';
+    debounceTimer = setTimeout(runRemoval, 180);
+  }
+  thresholdEl.addEventListener('input', debounceRun);
+  featherEl.addEventListener('input', debounceRun);
+
+  downloadBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'peelr-cutout.png';
+    link.href = canvasOut.toDataURL('image/png');
+    link.click();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    originalImageData = null;
+    blurredRGB = null;
+    clickSeed = null;
+    fileInput.value = '';
+    dzUpload.style.display = 'flex';
+    stage.style.display = 'none';
+    controlsRow.style.display = 'none';
+    resultActs.style.display = 'none';
+    pickHint.style.display = 'none';
+    setStatus('');
+  });
+
+  // Generates a simple synthetic product photo (flat-color shape on a
+  // solid backdrop) entirely on canvas, so "try a sample" needs no
+  // external image asset.
+  function generateSample(){
+    const w = 640, h = 480;
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    g.fillStyle = '#E7E2D8';
+    g.fillRect(0,0,w,h);
+    // soft shadow
+    g.beginPath();
+    g.ellipse(w/2, h*0.82, 130, 22, 0, 0, Math.PI*2);
+    g.fillStyle = 'rgba(0,0,0,0.08)';
+    g.fill();
+    // "bottle" shape
+    g.fillStyle = '#1F8A5B';
+    roundRect(g, w/2-55, h*0.22, 110, 260, 26);
+    g.fill();
+    g.fillStyle = '#0F5D3A';
+    roundRect(g, w/2-22, h*0.13, 44, 60, 10);
+    g.fill();
+    g.fillStyle = '#F4F1E8';
+    roundRect(g, w/2-40, h*0.42, 80, 90, 8);
+    g.fill();
+    return c.toDataURL('image/png');
+  }
+  function roundRect(g, x, y, w, h, r){
+    g.beginPath();
+    g.moveTo(x+r, y);
+    g.arcTo(x+w, y, x+w, y+h, r);
+    g.arcTo(x+w, y+h, x, y+h, r);
+    g.arcTo(x, y+h, x, y, r);
+    g.arcTo(x, y, x+w, y, r);
+    g.closePath();
+  }
+
+  sampleBtn.addEventListener('click', () => {
+    const dataUrl = generateSample();
+    const img = new Image();
+    img.onload = () => loadIntoStage(img, null);
+    img.src = dataUrl;
+  });
+})();
+</script>
+
+</body>
+</html>
